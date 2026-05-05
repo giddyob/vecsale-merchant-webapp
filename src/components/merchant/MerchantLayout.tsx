@@ -1,9 +1,18 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 import { MerchantSidebar } from "./MerchantSidebar";
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Bell, Loader2 } from "lucide-react";
+import { Bell, Loader2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+function HeaderTrigger() {
+  const { toggleSidebar } = useSidebar();
+  return (
+    <Button variant="ghost" size="icon" onClick={toggleSidebar} className="text-muted-foreground">
+      <Menu className="h-5 w-5" />
+    </Button>
+  );
+}
 
 export function MerchantLayout() {
   const { user, loading } = useAuth();
@@ -22,12 +31,12 @@ export function MerchantLayout() {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <div className="min-h-screen flex w-full overflow-hidden">
         <MerchantSidebar />
-        <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-14 flex items-center justify-between border-b bg-card px-4 sticky top-0 z-10">
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+          <header className="h-14 flex items-center justify-between border-b bg-card px-4 sticky top-0 z-10 shrink-0">
             <div className="flex items-center gap-2">
-              <SidebarTrigger className="text-muted-foreground" />
+              <HeaderTrigger />
             </div>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon" className="relative">
@@ -36,7 +45,7 @@ export function MerchantLayout() {
               </Button>
             </div>
           </header>
-          <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
+          <main className="flex-1 p-4 md:p-6 overflow-auto min-w-0">
             <Outlet />
           </main>
         </div>

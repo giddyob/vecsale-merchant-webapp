@@ -108,8 +108,8 @@ export default function Payouts() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-heading text-2xl font-bold">Payouts</h1>
           <p className="text-muted-foreground text-sm">Track your earnings and request payouts</p>
@@ -266,7 +266,8 @@ export default function Payouts() {
           <CardTitle className="text-base font-heading">Payout History</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
+          {/* Desktop table */}
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b bg-muted/30">
@@ -294,6 +295,22 @@ export default function Payouts() {
                 })}
               </tbody>
             </table>
+          </div>
+          {/* Mobile card list */}
+          <div className="sm:hidden divide-y">
+            {payouts.map((p) => {
+              const config = statusConfig[p.status] || statusConfig.pending;
+              return (
+                <div key={p.id} className="p-4 space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-heading font-semibold text-sm">{formatCurrency(p.amount)}</span>
+                    <span className={`merchant-badge ${config.badge} capitalize`}>{p.status}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground truncate">{p.description || p.type}</p>
+                  <p className="text-xs text-muted-foreground">{new Date(p.date).toLocaleDateString()}</p>
+                </div>
+              );
+            })}
           </div>
           {payouts.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">

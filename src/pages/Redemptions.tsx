@@ -56,6 +56,12 @@ export default function Redemptions() {
     EXPIRED: <XCircle className="h-4 w-4 text-destructive" />,
   };
 
+  const statusBadge: Record<string, string> = {
+    UNUSED: "badge-warning",
+    REDEEMED: "badge-success",
+    EXPIRED: "badge-destructive",
+  };
+
   const pendingCount = coupons.filter((r: any) => r.status === "UNUSED").length;
   const redeemedCount = coupons.filter((r: any) => r.status === "REDEEMED").length;
 
@@ -68,58 +74,60 @@ export default function Redemptions() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-5 animate-fade-in">
       <div>
         <h1 className="font-heading text-2xl font-bold">Redemptions</h1>
         <p className="text-muted-foreground text-sm">Manage and redeem customer vouchers</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-3">
         <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-warning/10 flex items-center justify-center">
-              <Clock className="h-5 w-5 text-warning" />
+          <CardContent className="p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+            <div className="h-9 w-9 shrink-0 rounded-lg bg-warning/10 flex items-center justify-center">
+              <Clock className="h-4 w-4 text-warning" />
             </div>
-            <div>
-              <p className="text-2xl font-heading font-bold">{pendingCount}</p>
+            <div className="min-w-0">
+              <p className="text-xl sm:text-2xl font-heading font-bold">{pendingCount}</p>
               <p className="text-xs text-muted-foreground">Unused</p>
             </div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-success/10 flex items-center justify-center">
-              <CheckCircle2 className="h-5 w-5 text-success" />
+          <CardContent className="p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+            <div className="h-9 w-9 shrink-0 rounded-lg bg-success/10 flex items-center justify-center">
+              <CheckCircle2 className="h-4 w-4 text-success" />
             </div>
-            <div>
-              <p className="text-2xl font-heading font-bold">{redeemedCount}</p>
+            <div className="min-w-0">
+              <p className="text-xl sm:text-2xl font-heading font-bold">{redeemedCount}</p>
               <p className="text-xs text-muted-foreground">Redeemed</p>
             </div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
-              <QrCode className="h-5 w-5 text-muted-foreground" />
+          <CardContent className="p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+            <div className="h-9 w-9 shrink-0 rounded-lg bg-muted flex items-center justify-center">
+              <QrCode className="h-4 w-4 text-muted-foreground" />
             </div>
-            <div>
-              <p className="text-2xl font-heading font-bold">{coupons.length}</p>
+            <div className="min-w-0">
+              <p className="text-xl sm:text-2xl font-heading font-bold">{coupons.length}</p>
               <p className="text-xs text-muted-foreground">Total</p>
             </div>
           </CardContent>
         </Card>
       </div>
 
+      {/* Redeem input */}
       <Card className="border-primary/20">
-        <CardHeader>
+        <CardHeader className="pb-3">
           <CardTitle className="text-base font-heading flex items-center gap-2">
             <QrCode className="h-5 w-5 text-primary" />
             Redeem a Voucher
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2 items-center">
-            <div className="flex items-center h-11 rounded-lg border bg-background px-3 font-mono text-sm tracking-wider">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex items-center h-11 rounded-lg border bg-background px-3 font-mono text-sm tracking-wider flex-1">
               <span className="text-muted-foreground">VS</span>
               <span className="mx-2 text-muted-foreground">-</span>
               <input
@@ -131,23 +139,25 @@ export default function Redemptions() {
                 }
                 placeholder="XXXXXXXX"
                 maxLength={8}
-                className="flex-1 bg-transparent outline-none w-[10ch] tracking-wider"
+                className="flex-1 bg-transparent outline-none min-w-0 tracking-wider"
                 onKeyDown={(e) => e.key === "Enter" && handleRedeem()}
               />
             </div>
-            <Button onClick={handleRedeem} className="gap-2 h-11" disabled={redeemCoupon.isPending}>
-              <CheckCircle2 className="h-4 w-4" />
-              Redeem
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setScannerOpen(true)}
-              className="gap-2 h-11"
-            >
-              <ScanLine className="h-4 w-4" />
-              Scan QR
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={handleRedeem} className="gap-2 h-11 flex-1 sm:flex-none" disabled={redeemCoupon.isPending}>
+                <CheckCircle2 className="h-4 w-4" />
+                Redeem
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setScannerOpen(true)}
+                className="gap-2 h-11 flex-1 sm:flex-none"
+              >
+                <ScanLine className="h-4 w-4" />
+                Scan QR
+              </Button>
+            </div>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
             Enter the 8-character voucher code or scan the customer's QR code.
@@ -161,6 +171,7 @@ export default function Redemptions() {
         onScan={(code) => redeemByCode(code)}
       />
 
+      {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -172,18 +183,20 @@ export default function Redemptions() {
             className="flex h-10 w-full rounded-lg border bg-background pl-9 pr-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 overflow-x-auto pb-1 shrink-0">
           {["all", "unused", "redeemed", "expired"].map((f) => (
-            <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)} className="capitalize">
+            <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)} className="capitalize whitespace-nowrap shrink-0">
               {f}
             </Button>
           ))}
         </div>
       </div>
 
+      {/* Voucher list */}
       <Card>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
+          {/* Desktop table */}
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b bg-muted/30">
@@ -227,6 +240,38 @@ export default function Redemptions() {
               </tbody>
             </table>
           </div>
+
+          {/* Mobile card list */}
+          <div className="sm:hidden divide-y">
+            {filtered.map((r: any) => (
+              <div key={r.id} className="p-4 space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-sm font-medium leading-snug flex-1 min-w-0">{r.dealTitle}</p>
+                  <span className={`merchant-badge ${statusBadge[r.status || "UNUSED"]} shrink-0`}>
+                    {r.status}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <code className="text-xs font-mono bg-muted px-2 py-1 rounded">{r.code}</code>
+                  <span className="text-xs text-muted-foreground">
+                    {r.purchase_date ? new Date(r.purchase_date).toLocaleDateString() : "—"}
+                  </span>
+                </div>
+                {r.status === "UNUSED" && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => redeemCoupon.mutate(r.id)}
+                    disabled={redeemCoupon.isPending}
+                  >
+                    Redeem
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+
           {filtered.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
               <p className="text-sm">No vouchers found</p>

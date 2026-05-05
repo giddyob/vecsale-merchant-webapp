@@ -48,7 +48,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-heading text-2xl font-bold">Dashboard</h1>
           <p className="text-muted-foreground text-sm">Welcome back! Here's your overview.</p>
@@ -138,9 +138,9 @@ export default function Dashboard() {
 
       {pendingPayout > 0 && (
         <Card className="border-primary/20 bg-primary/5">
-          <CardContent className="p-5 flex items-center justify-between">
+          <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
                 <DollarSign className="h-5 w-5 text-primary" />
               </div>
               <div>
@@ -149,7 +149,7 @@ export default function Dashboard() {
               </div>
             </div>
             <Link to="/payouts">
-              <Button variant="outline" size="sm">View Payouts</Button>
+              <Button variant="outline" size="sm" className="w-full sm:w-auto">View Payouts</Button>
             </Link>
           </CardContent>
         </Card>

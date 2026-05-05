@@ -55,7 +55,7 @@ export default function Deals() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-heading text-2xl font-bold">My Deals</h1>
           <p className="text-muted-foreground text-sm">{deals.length} total deals</p>
@@ -100,9 +100,9 @@ export default function Deals() {
             className="flex h-10 w-full rounded-lg border bg-background pl-9 pr-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 overflow-x-auto pb-1 shrink-0">
           {filters.map((f) => (
-            <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)} className="capitalize">
+            <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)} className="capitalize whitespace-nowrap shrink-0">
               {f}
             </Button>
           ))}
